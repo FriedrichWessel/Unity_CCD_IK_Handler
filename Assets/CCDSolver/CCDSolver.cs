@@ -32,17 +32,6 @@ namespace CCDSolver
 			ChainNodes.Insert(chainIndex, chainObject);
 		}
 
-		public float CalculateAngle(IIKNode node, IIKNode target)
-		{
-			Vector3 rotatedVector = node.WorldRotation * new Vector3(1, 0, 0); 
-			var lookAtVector = target.WorldPosition - node.WorldPosition;
-			float resultAngle = Vector3.Angle(lookAtVector, rotatedVector);
-			var perpendicularVector = Vector3.Cross( rotatedVector, lookAtVector);
-			if (perpendicularVector.z > 0)
-			{
-				return resultAngle;
-			}
-			return -resultAngle;
-		}
+		
 	}
 }

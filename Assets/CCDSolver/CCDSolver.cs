@@ -4,7 +4,9 @@ using UnityEngine.UI;
 
 namespace CCDSolver
 {
-	public class CCDSolver
+	
+
+	public class CCDSolver : ICCDSolver
 	{
 		public IIKNode IKTarget { get; private set; }
 		public IIKNode RootNode { get; private set; }

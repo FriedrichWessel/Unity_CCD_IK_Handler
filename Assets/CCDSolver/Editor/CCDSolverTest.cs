@@ -38,7 +38,7 @@ namespace CCDSolver.UnitTests
 			_solver.AddIKTarget(_ikTarget);
 			Assert.AreEqual(_ikTarget, _solver.IKTarget);
 		}
-
+		
 		[Test]
 		public void CanInsertChainObjectsToSolver()
 		{

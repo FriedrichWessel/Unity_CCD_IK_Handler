@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
@@ -38,7 +39,19 @@ namespace CCDSolver.UnitTests
 			_solver.AddIKTarget(_ikTarget);
 			Assert.AreEqual(_ikTarget, _solver.IKTarget);
 		}
-		
+
+		[Test]
+		public void ChangeIKTargetPositionShouldTriggerSolverCalculation()
+		{
+			_solver.AddIKTarget(_ikTarget);
+			_ikTarget.PositionChanged += Raise.Event<Action<Vector3>>(new Vector3(10, 0, 0));
+			_chainObjects[0].Received(1).UpdatePosition(Arg.Any<Vector3>());
+			_chainObjects[0].Received(1).UpdateRotation(Arg.Any<Quaternion>());
+			_chainObjects[1].Received(1).UpdatePosition(Arg.Any<Vector3>());
+			_chainObjects[0].Received(1).UpdateRotation(Arg.Any<Quaternion>());
+			
+		}
+
 		[Test]
 		public void CanInsertChainObjectsToSolver()
 		{

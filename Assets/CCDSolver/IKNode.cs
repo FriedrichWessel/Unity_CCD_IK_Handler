@@ -9,6 +9,7 @@ namespace CCDSolver
 {
 	public class IKNode : IIKNode {
 		
+		public event Action<Vector3> PositionChanged = (newPosition) => { };
 		public Vector3 WorldPosition { get; private set; }
 		public Quaternion WorldRotation { get; private set; }
 
@@ -35,6 +36,17 @@ namespace CCDSolver
 		{
 			var angle = CalculateAngleToPosition(targetPosition);
 			WorldRotation *= Quaternion.Euler(0, 0, angle);
+		}
+
+		public void UpdatePosition(Vector3 newPosition)
+		{
+			WorldPosition = newPosition;
+			PositionChanged(WorldPosition);
+		}
+
+		public void UpdateRotation(Quaternion newRotation)
+		{
+			WorldRotation = newRotation;
 		}
 	}
 

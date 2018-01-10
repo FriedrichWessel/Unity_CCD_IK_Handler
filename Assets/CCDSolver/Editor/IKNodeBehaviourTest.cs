@@ -26,17 +26,9 @@ namespace CCDSolver.Components.UnitTests
 		{
 			GameObject.DestroyImmediate(_parent.gameObject);
 		}
-
-		[Test]
-		public void ChainIndexShouldBeOneOnFirstHirachyLevel()
-		{
-			MethodInfo dynMethod = _testNode.GetType().GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
-			dynMethod.Invoke(_testNode, new object[]{});
-			Assert.AreEqual(1, _testNode.ChainIndex);
-		}
 		
 		[Test]
-		public void ChainIndexShouldBeFourOnForthHirachyLevel()
+		public void ChainIndexShouldBeThreeOnIfObjectHasThreeParentsAndRoot()
 		{
 			var p1 = new GameObject("P1");
 			var p2 = new GameObject("P2");
@@ -48,7 +40,15 @@ namespace CCDSolver.Components.UnitTests
 			
 			MethodInfo dynMethod = _testNode.GetType().GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
 			dynMethod.Invoke(_testNode, new object[]{});
-			Assert.AreEqual(4, _testNode.ChainIndex);
+			Assert.AreEqual(3, _testNode.ChainIndex);
+		}
+
+		[Test]
+		public void ChainIndexShouldBeZeroIfObjectHasOnlyRootAsParents()
+		{
+			MethodInfo dynMethod = _testNode.GetType().GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
+			dynMethod.Invoke(_testNode, new object[]{});
+			Assert.AreEqual(0, _testNode.ChainIndex);
 		}
 	}
 

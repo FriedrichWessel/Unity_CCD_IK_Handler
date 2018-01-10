@@ -8,15 +8,21 @@ using UnityEngine;
 namespace CCDSolver
 {
 	public class IKNode : IIKNode {
-		
-		public event Action<Vector3> PositionChanged = (newPosition) => { };
-		public Vector3 WorldPosition { get; private set; }
-		public Quaternion WorldRotation { get; private set; }
+		private Transform _connectedTransform;
 
-		public IKNode(Vector3 worldPosition, Quaternion worldRotation)
+		public event Action<Vector3> PositionChanged = (newPosition) => { };
+		public Vector3 WorldPosition {
+			get { return _connectedTransform.position; } 
+			private set { _connectedTransform.position = value; }
+		}
+		public Quaternion WorldRotation {
+			get { return _connectedTransform.rotation; }
+			private set { _connectedTransform.rotation = value; }
+		}
+
+		public IKNode(Transform connectedTransform)
 		{
-			WorldPosition = worldPosition;
-			WorldRotation = worldRotation;
+			_connectedTransform = connectedTransform;
 		}
 
 		public float CalculateAngleToPosition(Vector3 position)

@@ -20,9 +20,12 @@ namespace CCDSolver.UnitTests
 		{
 			_solver = new CCDSolver();
 			_rootNode = Substitute.For<IIKNode>();
+			_rootNode.WorldPosition.Returns(new Vector3(0, 0, 0));
 			_ikTarget = Substitute.For<IIKNode>();
 			var chainNode1 = Substitute.For<IIKNode>();
+			chainNode1.WorldPosition.Returns(new Vector3(5, 1, 0));
 			var chainNode2 = Substitute.For<IIKNode>();
+			chainNode2.WorldPosition.Returns(new Vector3(5, 5, 0));
 			_chainObjects = new List<IIKNode>(){chainNode1, chainNode2};
 		}
 
@@ -41,15 +44,15 @@ namespace CCDSolver.UnitTests
 		}
 
 		[Test]
-		public void ChangeIKTargetPositionShouldTriggerSolverCalculation()
+		public void ChangeIKTargetShouldOrientChildNodesTowardsHandle()
 		{
 			_solver.AddIKTarget(_ikTarget);
-			_ikTarget.PositionChanged += Raise.Event<Action<Vector3>>(new Vector3(10, 0, 0));
-			_chainObjects[0].Received(1).UpdatePosition(Arg.Any<Vector3>());
-			_chainObjects[0].Received(1).UpdateRotation(Arg.Any<Quaternion>());
-			_chainObjects[1].Received(1).UpdatePosition(Arg.Any<Vector3>());
-			_chainObjects[0].Received(1).UpdateRotation(Arg.Any<Quaternion>());
-			
+			_solver.InsertChainObject(0,_chainObjects[0]);
+			_solver.InsertChainObject(1,_chainObjects[1]);
+			var ikHandlePosition = new Vector3(10, 0, 0);
+			_ikTarget.PositionChanged += Raise.Event<Action<Vector3>>(ikHandlePosition);
+			_chainObjects[0].Received().RotateTowardsPosition(ikHandlePosition);
+			_chainObjects[1].Received().RotateTowardsPosition(ikHandlePosition);
 		}
 
 		[Test]
@@ -61,7 +64,17 @@ namespace CCDSolver.UnitTests
 			Assert.AreEqual(_chainObjects[1], _solver.ChainNodes[1]);
 		}
 
-		
+		[Test]
+		public void InsertLastChainObjectFirstShouldEnhanceTheList()
+		{
+			_solver.InsertChainObject(1, _chainObjects[1]);
+			_solver.InsertChainObject(0, _chainObjects[0]);
+			Assert.AreEqual(_chainObjects[0], _solver.ChainNodes[0]);
+			Assert.AreEqual(_chainObjects[1], _solver.ChainNodes[1]);
+			Assert.AreEqual(2,_solver.ChainNodes.Count);
+		}
+
+
 	}
 
 }

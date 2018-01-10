@@ -8,14 +8,22 @@ namespace CCDSolver.UnitTests
 
 	public class IKNodeTest  {
 		private IIKNode _testNode;
+		private Transform _testTransform;
 
 		[SetUp]
 		public void RunBeforeEveryTest()
 		{
-			_testNode = new IKNode(Vector3.zero, Quaternion.identity);
+			_testTransform = new GameObject("TestIKNode").transform;
+			_testNode = new IKNode(_testTransform);
 			
 		}
-		
+
+		[TearDown]
+		public void RunAfterEveryTest()
+		{
+			Object.DestroyImmediate(_testTransform.gameObject);
+		}
+
 		[Test]
 		public void CalculateAngleToOrthogonalPositionShouldReturn90()
 		{
@@ -85,8 +93,11 @@ namespace CCDSolver.UnitTests
 		public void UdpateRotationShouldChangeWorldRotationToGivenValue()
 		{
 			var testRotation = Quaternion.Euler(10, 2.4f, 13.8f);
-			_testNode.UpdateRotation(testRotation);
-			Assert.AreEqual(testRotation, _testNode.WorldRotation);
+			_testNode.UpdateRotation(testRotation);	
+			Assert.IsTrue(Mathf.Approximately(testRotation.w, _testNode.WorldRotation.w));
+			Assert.IsTrue(Mathf.Approximately(testRotation.x, _testNode.WorldRotation.x));
+			Assert.IsTrue(Mathf.Approximately(testRotation.y, _testNode.WorldRotation.y));
+			Assert.IsTrue(Mathf.Approximately(testRotation.z, _testNode.WorldRotation.z));
 		}
 	}
 

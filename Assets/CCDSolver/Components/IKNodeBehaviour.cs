@@ -19,7 +19,7 @@ namespace CCDSolver.Components
 			{
 				throw new MissingComponentException(string.Format("IKNodeBehaviour {0} needs a CCDSolverBehaviour in parent hirachy", gameObject.name));
 			}
-			IKNode = new IKNode(transform.position, transform.rotation);
+			IKNode = new IKNode(transform);
 			CalculateChainIndex();
 		}
 
@@ -31,11 +31,7 @@ namespace CCDSolver.Components
 				ChainIndex++;
 				parentTransform = parentTransform.parent;
 			}
-		}
-
-		// Update is called once per frame
-		void Update () {
-			
+			ChainIndex--; // substract root Node that is mandatory in hirachy
 		}
 	}
 }

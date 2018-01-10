@@ -26,12 +26,30 @@ namespace CCDSolver
 		public void AddIKTarget(IIKNode ikTarget)
 		{
 			IKTarget = ikTarget;
+			IKTarget.PositionChanged += CalculateChainNodePositions;
+		}
+
+		private void CalculateChainNodePositions(Vector3 newPosition)
+		{
+			for (int c = 0; c < 5; c++)
+			{
+				for (int i = ChainNodes.Count - 1; i >= 0; i--)
+				{
+					ChainNodes[i].RotateTowardsPosition(newPosition);
+				}
+				
+			}
+			
 		}
 
 
 		public void InsertChainObject(int chainIndex, IIKNode chainObject)
 		{
-			ChainNodes.Insert(chainIndex, chainObject);
+			while (chainIndex+1 > ChainNodes.Count)
+			{
+				ChainNodes.Add(null);
+			}
+			ChainNodes[chainIndex] =  chainObject;
 		}
 
 		

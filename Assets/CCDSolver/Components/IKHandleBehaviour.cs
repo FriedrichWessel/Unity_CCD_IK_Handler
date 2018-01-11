@@ -4,13 +4,17 @@ using UnityEngine;
 
 namespace CCDSolver.Components
 {
-	public class IKHandleBehaviour : IKNodeBehaviour
+	public class IKHandleBehaviour : MonoBehaviour
 	{
-		private Vector3 _cachedPosition; 
-		protected override void Start()
+		[SerializeField] private CCDSolverBehaviour _solverComponent;
+		
+		private Vector3 _cachedPosition;
+		private ITransformNode _node;
+		
+		protected void Start()
 		{
-			base.Start();
-			RootNode.Solver.AddIKTarget(IKNode);
+			_node = new TransformNode(transform);
+			_solverComponent.Solver.AddIKTarget(_node);
 		}
 
 		void Update()
@@ -18,7 +22,7 @@ namespace CCDSolver.Components
 			if (transform.position != _cachedPosition)
 			{
 				_cachedPosition = transform.position;
-				IKNode.UpdatePosition(transform.position);
+				_node.UpdatePosition(transform.position);
 			}
 		}
 	}

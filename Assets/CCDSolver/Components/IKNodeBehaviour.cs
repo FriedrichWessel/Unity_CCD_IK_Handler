@@ -26,12 +26,24 @@ namespace CCDSolver.Components
 		private void CalculateChainIndex()
 		{
 			var parentTransform = this.transform.parent;
-			while (parentTransform != null)
+			while (parentTransform != null && IsIKNode(parentTransform))
 			{
 				ChainIndex++;
 				parentTransform = parentTransform.parent;
 			}
-			ChainIndex--; // substract root Node that is mandatory in hirachy
+		}
+
+		private bool IsIKNode(Transform parentTransform)
+		{
+			var solver = parentTransform.GetComponents<Component>();
+			foreach (var component in solver)
+			{
+				if (component is IKNodeBehaviour)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

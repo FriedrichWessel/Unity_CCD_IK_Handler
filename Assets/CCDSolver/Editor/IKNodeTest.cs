@@ -53,51 +53,14 @@ namespace CCDSolver.UnitTests
 		}
 
 		[Test]
-		public void RotateTowardsPositionShouldRotateWorldRotationAroundDifferenceAngle()
+		public void RotateTowardsPositionShouldAlignToTargetPosition()
 		{
+			_testNode.RotateTowardsPosition(new Vector3(2.4f, -5, 0));
+			Assert.AreEqual(0, _testNode.CalculateAngleToPosition(new Vector3(2.4f, -5, 0)));
 			_testNode.RotateTowardsPosition(new Vector3(0, -10, 0));
-			Assert.AreEqual(new Vector3(0,0,90), _testNode.WorldRotation.eulerAngles);
-		}
-
-		[Test]
-		public void UpdatePositionShouldTriggerPositionChangedEvent()
-		{
-			bool called = false;
-			_testNode.PositionChanged += newPosition => { called = true; };
-			_testNode.UpdatePosition(new Vector3(10, 0, 0));
-			Assert.IsTrue(called);
-		}
-
-		[Test]
-		public void PositionChangedEventShouldDeliverNewPositionValues()
-		{
-			bool called = false;
-			_testNode.PositionChanged += newPosition =>
-			{
-				called = true;
-				Assert.AreEqual(new Vector3(10,0,0),newPosition );
-			};
-			_testNode.UpdatePosition(new Vector3(10, 0, 0));
-			Assert.IsTrue(called);
-		}
-
-		[Test]
-		public void UpdatePositionShouldChangeWorldPositionToGivenValue()
-		{
-			var testPosition = new Vector3(10, 14, 2.4f);
-			_testNode.UpdatePosition(testPosition);
-			Assert.AreEqual(testPosition, _testNode.WorldPosition);
-		}
-
-		[Test]
-		public void UdpateRotationShouldChangeWorldRotationToGivenValue()
-		{
-			var testRotation = Quaternion.Euler(10, 2.4f, 13.8f);
-			_testNode.UpdateRotation(testRotation);	
-			Assert.IsTrue(Mathf.Approximately(testRotation.w, _testNode.WorldRotation.w));
-			Assert.IsTrue(Mathf.Approximately(testRotation.x, _testNode.WorldRotation.x));
-			Assert.IsTrue(Mathf.Approximately(testRotation.y, _testNode.WorldRotation.y));
-			Assert.IsTrue(Mathf.Approximately(testRotation.z, _testNode.WorldRotation.z));
+			Assert.AreEqual(0, _testNode.CalculateAngleToPosition(new Vector3(0f, -10, 0)));
+			_testNode.RotateTowardsPosition(new Vector3(0, 10, 0));
+			Assert.AreEqual(0, _testNode.CalculateAngleToPosition(new Vector3(0f, 10, 0)));
 		}
 	}
 

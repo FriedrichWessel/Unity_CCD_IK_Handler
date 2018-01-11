@@ -12,7 +12,7 @@ namespace CCDSolver.UnitTests
 		private CCDSolver _solver;
 		
 		private IIKNode _rootNode;
-		private IIKNode _ikTarget;
+		private ITransformNode _ikTarget;
 		private List<IIKNode> _chainObjects;
 		
 		[SetUp]
@@ -21,7 +21,7 @@ namespace CCDSolver.UnitTests
 			_solver = new CCDSolver();
 			_rootNode = Substitute.For<IIKNode>();
 			_rootNode.WorldPosition.Returns(new Vector3(0, 0, 0));
-			_ikTarget = Substitute.For<IIKNode>();
+			_ikTarget = Substitute.For<ITransformNode>();
 			var chainNode1 = Substitute.For<IIKNode>();
 			chainNode1.WorldPosition.Returns(new Vector3(5, 1, 0));
 			var chainNode2 = Substitute.For<IIKNode>();

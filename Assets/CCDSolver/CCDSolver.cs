@@ -8,7 +8,7 @@ namespace CCDSolver
 
 	public class CCDSolver : ICCDSolver
 	{
-		public IIKNode IKTarget { get; private set; }
+		public ITransformNode IKTarget { get; private set; }
 		public IIKNode RootNode { get; private set; }
 
 		public List<IIKNode> ChainNodes { get; private set;}
@@ -23,7 +23,7 @@ namespace CCDSolver
 			RootNode = rootNode;
 		}
 
-		public void AddIKTarget(IIKNode ikTarget)
+		public void AddIKTarget(ITransformNode ikTarget)
 		{
 			IKTarget = ikTarget;
 			IKTarget.PositionChanged += CalculateChainNodePositions;
